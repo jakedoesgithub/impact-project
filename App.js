@@ -6,7 +6,6 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as firebase from "firebase";
 import ApiKeys from "./constants/ApiKeys"
-
 import AppNavigator from './navigation/AppNavigator';
 
 export default function App(props) {
@@ -14,15 +13,17 @@ export default function App(props) {
   const [isAuthenticated, setAuthenticated] = useState(false);
   const [isAuthenticationReady, setAuthenticationReady] = useState(false);
 
-  if (!firebase.apps.length) { firebase.initializeApp(ApiKeys.FirebaseConfig); }
-    firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
-
   onAuthStateChanged = (user) => {
     setAuthenticationReady(true);
     setAuthenticated(!!user);
   }
 
-  if (!isLoadingComplete && !props.skipLoadingScreen) {
+  if (!firebase.apps.length) {firebase.initializeApp(ApiKeys.FirebaseConfig);}
+  firebase.auth().onAuthStateChanged(onAuthStateChanged);
+
+
+
+  if (!isLoadingComplete && !isAuthenticationReady && !props.skipLoadingScreen) {
     return (
       <AppLoading
         startAsync={loadResourcesAsync}
@@ -34,11 +35,12 @@ export default function App(props) {
     return (
       <View style={styles.container}>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <AppNavigator />
+        {(isAuthenticated)? <MainTabNavigator/>:<AppNavigator/>}
       </View>
     );
   }
 }
+
 
 async function loadResourcesAsync() {
   await Promise.all([
