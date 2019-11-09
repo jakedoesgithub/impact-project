@@ -4,11 +4,23 @@ import * as Font from 'expo-font';
 import React, { useState } from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import * as firebase from "firebase";
+import ApiKeys from "./constants/ApiKeys"
 
 import AppNavigator from './navigation/AppNavigator';
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
+  const [isAuthenticated, setAuthenticated] = useState(false);
+  const [isAuthenticationReady, setAuthenticationReady] = useState(false);
+
+  if (!firebase.apps.length) { firebase.initializeApp(ApiKeys.FirebaseConfig); }
+    firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
+
+  onAuthStateChanged = (user) => {
+    setAuthenticationReady(true);
+    setAuthenticated(!!user);
+  }
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
     return (
