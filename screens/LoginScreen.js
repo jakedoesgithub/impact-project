@@ -9,7 +9,7 @@ import {Image,
     View,
     TextInput,
     Dimensions,
-    Button } from 'react-native';
+    Button, Alert } from 'react-native';
 
 import { NavigationActions } from 'react-navigation';
 import * as firebase from 'firebase';
