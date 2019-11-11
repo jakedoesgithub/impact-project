@@ -6,7 +6,7 @@ import { Image,
     TouchableOpacity,
     View,
     TextInput,
-    Dimensions, Button} from 'react-native';
+    Dimensions, Button, Alert} from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import * as firebase from 'firebase';
 
