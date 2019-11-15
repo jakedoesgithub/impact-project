@@ -11,7 +11,7 @@ import {Image,
     Alert  } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import * as firebase from 'firebase';
-
+import "firebase/firestore";
 
 const {width: WIDTH} = Dimensions.get('window')
 export default function SignupScreen(props) {
@@ -19,22 +19,40 @@ export default function SignupScreen(props) {
     const [password, setPassword] = useState("");
     const [passwordConfirm, setPasswordConfirm] = useState("");
 
+  
 
     onSignupPress = () => {
         if (password !== passwordConfirm) {
-            Alert.alert("Passwords do not match");
+            Alert.alert("Passwords do not match")
             return;
+        }
+        var emailRegex = /.edu$/;
+        if (!emailRegex.test(email)){
+          Alert.alert("Email must be a university email ending in .edu")
+          return;
         }
 
         firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then(() => { }, (error) => { Alert.alert(error.message); });
+            .then(() => {
+              Alert.alert("Account successfuly created");
+              createUserInDB(email);
+              props.navigation.navigate("Login")
+             }, (error) => { Alert.alert(error.message); });
     }
 
     onBackToLoginPress = () => {
         props.navigation.navigate("Login");
     }
 
- 
+    createUserInDB = (emailAddress) =>{ firebase.firestore().collection("users").doc(emailAddress).set({
+      email:emailAddress
+    }).then(()=> {
+      console.log("Document written to users with ID: ", emailAddress);
+    }).catch(function(error) {
+      console.error("Error adding document: ", error);
+  });
+
+    }
     return (
         <View style={styles.backgroundContainer}>
         

@@ -3,9 +3,10 @@ import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
 import TabBarIcon from '../components/TabBarIcon';
-import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
+import ChatScreen from '../screens/ChatScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import TestScreen from "../screens/TestScreen";
+
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -14,7 +15,7 @@ const config = Platform.select({
 
 const HomeStack = createStackNavigator(
   {
-    Home: HomeScreen,
+    Test: TestScreen,
   },
   config
 );
@@ -35,21 +36,21 @@ HomeStack.navigationOptions = {
 
 HomeStack.path = '';
 
-const LinksStack = createStackNavigator(
+const ChatStack = createStackNavigator(
   {
-    Links: LinksScreen,
+    Chat: ChatScreen,
   },
   config
 );
 
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
+ChatStack.navigationOptions = {
+  tabBarLabel: 'Chat',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
   ),
 };
 
-LinksStack.path = '';
+ChatStack.path = '';
 
 const SettingsStack = createStackNavigator(
   {

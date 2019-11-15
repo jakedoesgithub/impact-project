@@ -24,7 +24,7 @@ export default function LoginScreenOld(props) {
 
     onLoginPress = () => {
         firebase.auth().signInWithEmailAndPassword(email, password)
-            .then(() => { }, (error) => { Alert.alert(error.message); });
+            .then(() => {props.navigation.navigate("Main") }, (error) => { Alert.alert(error.message); });
     }
 
     onCreateAccountPress = () => {

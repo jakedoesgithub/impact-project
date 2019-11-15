@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as firebase from "firebase";
 import ApiKeys from "./constants/ApiKeys"
 import AppNavigator from './navigation/AppNavigator';
+import MainNavigator from './navigation/MainNavigator'
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
@@ -35,7 +36,7 @@ export default function App(props) {
     return (
       <View style={styles.container}>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        {(isAuthenticated)? <MainTabNavigator/>:<AppNavigator/>}
+        {(isAuthenticated)? <MainNavigator/>:<AppNavigator/>}
       </View>
     );
   }
