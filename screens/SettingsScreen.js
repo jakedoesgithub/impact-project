@@ -1,12 +1,26 @@
-import React from 'react';
-import { ExpoConfigView } from '@expo/samples';
+import React, {useState} from 'react';
+import { ImagePicker} from 'expo';
+import {Permissions } from 'expo-permissions';
+import {
+	StyleSheet,
+	Text,
+	TextInput,
+	View,
+	Button,
+  ImageEditor,
+} from 'react-native';
+import * as firebase from "firebase";
 
 export default function SettingsScreen() {
-  /**
-   * Go ahead and delete ExpoConfigView and replace it with your content;
-   * we just wanted to give you a quick view of your config.
-   */
-  return <ExpoConfigView />;
+  const[avatar, setAvatar] = useState("");
+
+ 
+  return (
+    <View>
+      <Text>Change Profile Picture</Text>
+    </View>
+  )
+ 
 }
 
 SettingsScreen.navigationOptions = {
