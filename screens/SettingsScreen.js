@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import React, {useState} from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import {Permissions } from 'expo-permissions';
@@ -59,12 +60,21 @@ import { ExpoConfigView } from '@expo/samples';
 
 export default function SettingsScreen() {
 >>>>>>> 0e745f063dfa83acc89c3c1d57366cc81ba943b9
+=======
+import React from 'react';
+import { ExpoConfigView } from '@expo/samples';
+
+export default function SettingsScreen() {
+>>>>>>> 0e745f063dfa83acc89c3c1d57366cc81ba943b9
   /**
    * Go ahead and delete ExpoConfigView and replace it with your content;
    * we just wanted to give you a quick view of your config.
    */
   return <ExpoConfigView />;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 0e745f063dfa83acc89c3c1d57366cc81ba943b9
+=======
 >>>>>>> 0e745f063dfa83acc89c3c1d57366cc81ba943b9
 =======
 >>>>>>> 0e745f063dfa83acc89c3c1d57366cc81ba943b9
