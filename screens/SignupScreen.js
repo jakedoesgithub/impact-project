@@ -8,9 +8,7 @@ import {Image,
     TextInput,
     Dimensions,
     Button,
-    Alert,
-    ScrollView,
-    Picker  } from 'react-native';
+    Alert  } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import * as firebase from 'firebase';
 import "firebase/firestore";
@@ -20,12 +18,7 @@ export default function SignupScreen(props) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [passwordConfirm, setPasswordConfirm] = useState("");
-    const [first_name, setFirstName] = useState("");
-    const [last_name, setLastName] = useState("");
-    const [user_name, setUserName] = useState("");
-    const [user_type, setUserType] = useState("none");
-    const [user_city, setUserCity] = useState("");
-    const [user_state, setUserState] = useState("");
+
   
 
     onSignupPress = () => {
@@ -38,36 +31,11 @@ export default function SignupScreen(props) {
           Alert.alert("Email must be a university email ending in .edu")
           return;
         }
-        if (first_name.length < 1){
-          Alert.alert("First Name must not be blank")
-          return;
-        }
-        if (last_name.length < 1){
-          Alert.alert("Last Name must not be blank")
-          return;
-        }
-        if (user_name.length < 1){
-          Alert.alert("User Name must not be blank")
-          return;
-        }
-        if (user_city.length < 1){
-          Alert.alert("City must not be blank")
-          return;
-        }
-        if (user_state.length < 1){
-          Alert.alert("State must not be blank")
-          return;
-        }
-        if (user_type == "none"){
-          Alert.alert("You must select either Mentor or Student as User Type")
-          return;
-        }
-        //insert condition to check userType
 
         firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then(({user}) => {
+            .then(() => {
               Alert.alert("Account successfuly created");
-              createUserInDB(email, user);
+              createUserInDB(email);
               props.navigation.navigate("Login")
              }, (error) => { Alert.alert(error.message); });
     }
@@ -76,26 +44,16 @@ export default function SignupScreen(props) {
         props.navigation.navigate("Login");
     }
 
-    createUserInDB = (emailAddress, userToken) =>{ 
-      firebase.firestore().collection("users").doc(userToken.uid).set({
-        email:emailAddress,
-        userID: userToken.uid,
-        firstName: first_name,
-        lastName: last_name,
-        userName: user_name,
-        userType: user_type,
-        city: user_city,
-        state: user_state,
-        creationDate: firebase.firestore.FieldValue.serverTimestamp()
-      }).then(()=> {
-        console.log("Document written to users with ID: ", userToken.uid);
+    createUserInDB = (emailAddress) =>{ firebase.firestore().collection("users").doc(emailAddress).set({
+      email:emailAddress
+    }).then(()=> {
+      console.log("Document written to users with ID: ", emailAddress);
     }).catch(function(error) {
-        console.error("Error adding document: ", error);
+      console.error("Error adding document: ", error);
   });
 
     }
     return (
-        <ScrollView>
         <View style={styles.backgroundContainer}>
         
         <View style={styles.logoContainer}>
@@ -117,87 +75,7 @@ export default function SignupScreen(props) {
                 autoCorrect={false}
             />
 
-            </View><View style={styles.inputContainer}>
-          <TextInput
-                style={styles.input}
-                value={first_name}
-                onChangeText={(text) => setFirstName(text)}
-                placeholder="First Name"
-                autoCapitalize="none"
-                autoCorrect={false}
-                placeholderTextColor={ 'rgba(255,255,255,0.7)'}
-                underlineColorAndroid='transparent'
-            />
             </View>
-
-            <View style={styles.inputContainer}>
-          <TextInput
-                style={styles.input}
-                value={last_name}
-                onChangeText={(text) => setLastName(text)}
-                placeholder="Last Name"
-                autoCapitalize="none"
-                autoCorrect={false}
-                placeholderTextColor={ 'rgba(255,255,255,0.7)'}
-                underlineColorAndroid='transparent'
-            />
-            </View>
-
-            <View style={styles.inputContainer}>
-          <TextInput
-                style={styles.input}
-                value={user_name}
-                onChangeText={(text) => setUserName(text)}
-                placeholder="User Name"
-                autoCapitalize="none"
-                autoCorrect={false}
-                placeholderTextColor={ 'rgba(255,255,255,0.7)'}
-                underlineColorAndroid='transparent'
-            />
-            </View>
-
-            <View style={styles.inputContainer}>
-          <TextInput
-                style={styles.input}
-                value={user_city}
-                onChangeText={(text) => setUserCity(text)}
-                placeholder="City"
-                autoCapitalize="none"
-                autoCorrect={false}
-                placeholderTextColor={ 'rgba(255,255,255,0.7)'}
-                underlineColorAndroid='transparent'
-            />
-            </View>
-
-            <View style={styles.inputContainer}>
-          <TextInput
-                style={styles.input}
-                value={user_state}
-                onChangeText={(text) => setUserState(text)}
-                placeholder="State"
-                autoCapitalize="none"
-                autoCorrect={false}
-                placeholderTextColor={ 'rgba(255,255,255,0.7)'}
-                underlineColorAndroid='transparent'
-            />
-            </View>
-
-          <View style={styles.inputContainer}>
-          <Picker
-                style={styles.input}
-                selectedValue={user_type}
-                onValueChange={(itemValue) => setUserType(itemValue)}
-                placeholder="Select Account Type"
-                placeholderTextColor={ 'rgba(255,255,255,0.7)'}
-                underlineColorAndroid='transparent'
-            >
-               <Picker.Item label = "Select A User Type" value = "none" />
-               <Picker.Item label = "Mentor" value = "mentor" />
-               <Picker.Item label = "Student" value = "student" />
-          </Picker>
-
-            </View>
-
             <View style={styles.inputContainer}>
           <TextInput
                 style={styles.input}
@@ -231,7 +109,6 @@ export default function SignupScreen(props) {
 
             <Button title="Back to Login" onPress={onBackToLoginPress} />
         </View>
-        </ScrollView>
 
     );
 }

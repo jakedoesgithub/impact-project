@@ -3,8 +3,6 @@ import { ScrollView, StyleSheet, Text, View, TextInput, Button, Linking, Alert, 
 import { TestComponent, PhoneButton } from './../components/AppComponents';
 import * as firebase from 'firebase';
 
-
-/* move all of this stuff to the settings screen once we implement changeProfilePicture*/
 export default class TestScreen extends React.Component {
   static navigationOptions = {
     header: null,

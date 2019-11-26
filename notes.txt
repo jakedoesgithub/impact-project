@@ -1,2 +1,0 @@
-Be sure to move the functionality from the test screen (change passsword, change email, signout) to the settings
-page before the app is finished.
