@@ -16,7 +16,7 @@ import { NavigationActions } from 'react-navigation';
 import * as firebase from 'firebase';
 
 const {width: WIDTH} = Dimensions.get('window')
-export default function LoginScreenOld(props) {
+export default function LoginScreen(props) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 

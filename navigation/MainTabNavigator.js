@@ -7,6 +7,7 @@ import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import TestScreen from "../screens/TestScreen";
+import ChatScreen from "../screens/ChatScreen";
 
 
 const config = Platform.select({
@@ -36,6 +37,22 @@ HomeStack.navigationOptions = {
 };
 
 HomeStack.path = '';
+
+const ChatStack = createStackNavigator(
+  {
+    Chat: ChatScreen,
+  },
+  config
+);
+
+ChatStack.navigationOptions = {
+  tabBarLabel: 'Chat',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
+  ),
+};
+
+ChatStack.path = '';
 
 const LinksStack = createStackNavigator(
   {
@@ -71,6 +88,7 @@ SettingsStack.path = '';
 
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
+  ChatStack,
   LinksStack,
   SettingsStack,
 });
