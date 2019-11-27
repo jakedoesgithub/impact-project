@@ -15,7 +15,8 @@ import { NavigationActions } from 'react-navigation'
 import * as firebase from 'firebase';
 
 const {width: WIDTH} = Dimensions.get('window')
-export default function LoginScreenOld(props) {
+
+export default function StudentProfileScreen(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -35,31 +36,7 @@ export default function LoginScreenOld(props) {
           </View>
         </View>
         </View>
-        <View style={styles.socialRow}>
-          <View>
-            <Icon
-              size={30}
-              type="entypo"
-              color="#3B5A98"
-              name="facebook-with-circle"
-            />
-          </View>
-          <View style={styles.socialIcon}>
-            <Icon
-              size={30}
-              type="entypo"
-              color="#56ACEE"
-              name="twitter-with-circle"
-            />
-          </View>
-          <View>
-            <Icon
-              size={30}
-              type="entypo"
-              color="#DD4C39"
-              name="google--with-circle"
-            />
-          </View>
+      
         </View>
         <View style={styles.bodyContainer}>
             <Text style={styles.info}>Email: cludwi4@lsu.edu</Text>
@@ -73,13 +50,13 @@ export default function LoginScreenOld(props) {
             />
             <View style={styles.buttonContainer}>
               <TouchableOpacity style={styles.button}>
-                <Text style={styles.buttonText}>Message Mentor</Text>
+                <Text style={styles.buttonText}>Message Student</Text>
               </TouchableOpacity>
             </View>
         </View>
       </View>
     )
-  }
+}
 const styles = StyleSheet.create({
   bodyContainer: {
     flex: 2,
