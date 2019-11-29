@@ -16,7 +16,7 @@ import "firebase/firestore";
 
 const {width: WIDTH} = Dimensions.get('window')
 export default function SignupScreen(props) {
-    const [email, setEmail] = useState("");
+    const [email_address, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [passwordConfirm, setPasswordConfirm] = useState("");
     const [first_name, setFirstName] = useState("");
@@ -33,7 +33,7 @@ export default function SignupScreen(props) {
             return;
         }
         var emailRegex = /.edu$/;
-        if (!emailRegex.test(email)){
+        if (!emailRegex.test(email_address)){
           Alert.alert("Email must be a university email ending in .edu")
           return;
         }
@@ -63,10 +63,10 @@ export default function SignupScreen(props) {
         }
         //insert condition to check userType
 
-        firebase.auth().createUserWithEmailAndPassword(email, password)
+        firebase.auth().createUserWithEmailAndPassword(email_address, password)
             .then(({user}) => {
               Alert.alert("Account successfuly created");
-              createUserInDB(email, user);
+              createUserInDB(user);
               props.navigation.navigate("Login")
              }, (error) => { Alert.alert(error.message); });
     }
@@ -75,9 +75,9 @@ export default function SignupScreen(props) {
         props.navigation.navigate("Login");
     }
 
-    createUserInDB = (emailAddress, userToken) =>{ 
+    createUserInDB = (userToken) =>{ 
       firebase.firestore().collection("users").doc(userToken.uid).set({
-        email:emailAddress,
+        email:email_address,
         userID: userToken.uid,
         firstName: first_name,
         lastName: last_name,
@@ -85,6 +85,8 @@ export default function SignupScreen(props) {
         userType: user_type,
         city: user_city,
         state: user_state,
+        major: "N/A",
+        school: "N/A",
         creationDate: firebase.firestore.FieldValue.serverTimestamp()
       }).then(()=> {
         console.log("Document written to users with ID: ", userToken.uid);
@@ -95,18 +97,17 @@ export default function SignupScreen(props) {
     }
     return (
         <ScrollView>
-        <View style={styles.backgroundContainer}>
-        
-        <View style={styles.logoContainer}>
-        <Image source={require('../assets/images/icon.png')} style={styles.logo}/>
-        <Text style={styles.logoText}>SIGN UP</Text>
-        </View> 
+          <View style={styles.backgroundContainer}>
+          
+            <View style={styles.logoContainer}>
+              <Image source={require('../assets/images/icon.png')} style={styles.logo}/>
+              <Text style={styles.logoText}>SIGN UP</Text>
+            </View> 
 
-        <View style={styles.inputContainer}>
-            
-            <TextInput 
+            <View style={styles.inputContainer}>
+              <TextInput 
                 style={styles.input}
-                value={email}
+                value={email_address}
                 onChangeText={(text) => setEmail(text)}
                 placeholder=".edu Email"
                 keyboardType="email-address"
@@ -114,122 +115,124 @@ export default function SignupScreen(props) {
                 placeholderTextColor={ 'rgba(255,255,255,0.7)'}
                 underlineColorAndroid='transparent'
                 autoCorrect={false}
-            />
-
-            </View><View style={styles.inputContainer}>
-          <TextInput
-                style={styles.input}
-                value={first_name}
-                onChangeText={(text) => setFirstName(text)}
-                placeholder="First Name"
-                autoCapitalize="none"
-                autoCorrect={false}
-                placeholderTextColor={ 'rgba(255,255,255,0.7)'}
-                underlineColorAndroid='transparent'
-            />
+              />
             </View>
 
             <View style={styles.inputContainer}>
-          <TextInput
-                style={styles.input}
-                value={last_name}
-                onChangeText={(text) => setLastName(text)}
-                placeholder="Last Name"
-                autoCapitalize="none"
-                autoCorrect={false}
-                placeholderTextColor={ 'rgba(255,255,255,0.7)'}
-                underlineColorAndroid='transparent'
-            />
+              <TextInput
+                  style={styles.input}
+                  value={first_name}
+                  onChangeText={(text) => setFirstName(text)}
+                  placeholder="First Name"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  placeholderTextColor={ 'rgba(255,255,255,0.7)'}
+                  underlineColorAndroid='transparent'
+              />
             </View>
-
+                
             <View style={styles.inputContainer}>
-          <TextInput
-                style={styles.input}
-                value={user_name}
-                onChangeText={(text) => setUserName(text)}
-                placeholder="User Name"
-                autoCapitalize="none"
-                autoCorrect={false}
-                placeholderTextColor={ 'rgba(255,255,255,0.7)'}
-                underlineColorAndroid='transparent'
-            />
-            </View>
+              <TextInput
+                  style={styles.input}
+                  value={last_name}
+                  onChangeText={(text) => setLastName(text)}
+                  placeholder="Last Name"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  placeholderTextColor={ 'rgba(255,255,255,0.7)'}
+                  underlineColorAndroid='transparent'
+                />
+              </View>
 
-            <View style={styles.inputContainer}>
-          <TextInput
-                style={styles.input}
-                value={user_city}
-                onChangeText={(text) => setUserCity(text)}
-                placeholder="City"
-                autoCapitalize="none"
-                autoCorrect={false}
-                placeholderTextColor={ 'rgba(255,255,255,0.7)'}
-                underlineColorAndroid='transparent'
-            />
-            </View>
+              <View style={styles.inputContainer}>
+               <TextInput
+                  style={styles.input}
+                  value={user_name}
+                  onChangeText={(text) => setUserName(text)}
+                  placeholder="User Name"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  placeholderTextColor={ 'rgba(255,255,255,0.7)'}
+                  underlineColorAndroid='transparent'
+                />
+              </View>
 
-            <View style={styles.inputContainer}>
-          <TextInput
-                style={styles.input}
-                value={user_state}
-                onChangeText={(text) => setUserState(text)}
-                placeholder="State"
-                autoCapitalize="none"
-                autoCorrect={false}
-                placeholderTextColor={ 'rgba(255,255,255,0.7)'}
-                underlineColorAndroid='transparent'
-            />
-            </View>
+              <View style={styles.inputContainer}>
+                <TextInput
+                  style={styles.input}
+                  value={user_city}
+                  onChangeText={(text) => setUserCity(text)}
+                  placeholder="City"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  placeholderTextColor={ 'rgba(255,255,255,0.7)'}
+                  underlineColorAndroid='transparent'
+                />
+              </View>
 
-          <View style={styles.inputContainer}>
-          <Picker
-                style={styles.input}
-                selectedValue={user_type}
-                onValueChange={(itemValue) => setUserType(itemValue)}
-                placeholder="Select Account Type"
-                placeholderTextColor={ 'rgba(255,255,255,0.7)'}
-                underlineColorAndroid='transparent'
-            >
-               <Picker.Item label = "Select A User Type" value = "none" />
-               <Picker.Item label = "Mentor" value = "mentor" />
-               <Picker.Item label = "Student" value = "student" />
-          </Picker>
+              <View style={styles.inputContainer}>
+                <TextInput
+                  style={styles.input}
+                  value={user_state}
+                  onChangeText={(text) => setUserState(text)}
+                  placeholder="State"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  placeholderTextColor={ 'rgba(255,255,255,0.7)'}
+                  underlineColorAndroid='transparent'
+                />
+              </View>
 
-            </View>
+              <View style={styles.inputContainer}>
+                <Picker
+                    style={styles.input}
+                    selectedValue={user_type}
+                    onValueChange={(itemValue) => setUserType(itemValue)}
+                    placeholder="Select Account Type"
+                    placeholderTextColor={ 'rgba(255,255,255,0.7)'}
+                    underlineColorAndroid='transparent'
+                >
+                  <Picker.Item label = "Select A User Type" value = "none" />
+                  <Picker.Item label = "Mentor" value = "mentor" />
+                  <Picker.Item label = "Student" value = "student" />
+                </Picker>
+              </View>
 
-            <View style={styles.inputContainer}>
-          <TextInput
-                style={styles.input}
-                value={password}
-                onChangeText={(text) => setPassword(text)}
-                placeholder="Password"
-                secureTextEntry={true}
-                autoCapitalize="none"
-                autoCorrect={false}
-                placeholderTextColor={ 'rgba(255,255,255,0.7)'}
-                underlineColorAndroid='transparent'
-            />
-            </View>
+              <View style={styles.inputContainer}>
+                <TextInput
+                    style={styles.input}
+                    value={password}
+                    onChangeText={(text) => setPassword(text)}
+                    placeholder="Password"
+                    secureTextEntry={true}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    placeholderTextColor={ 'rgba(255,255,255,0.7)'}
+                    underlineColorAndroid='transparent'
+                />
+              </View>
 
-            <View style={styles.inputContainer}>
-            <TextInput 
-                style={styles.input}
-                value={passwordConfirm}
-                onChangeText={(text) => setPasswordConfirm(text)}
-                placeholder="Confirm Password"
-                secureTextEntry={true}
-                autoCapitalize="none"
-                autoCorrect={false}
-                placeholderTextColor={ 'rgba(255,255,255,0.7)'}
-                underlineColorAndroid='transparent'
-            />
-            </View>
-            <TouchableOpacity style={styles.btnSignUp} onPress={onSignupPress}>
-           <Text style={styles.text}>Signup</Text> 
-        </TouchableOpacity>
+              <View style={styles.inputContainer}>
+                <TextInput 
+                    style={styles.input}
+                    value={passwordConfirm}
+                    onChangeText={(text) => setPasswordConfirm(text)}
+                    placeholder="Confirm Password"
+                    secureTextEntry={true}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    placeholderTextColor={ 'rgba(255,255,255,0.7)'}
+                    underlineColorAndroid='transparent'
+                />
+              </View>
 
-            <Button title="Back to Login" onPress={onBackToLoginPress} />
-        </View>
+
+              <TouchableOpacity style={styles.btnSignUp} onPress={onSignupPress}>
+                <Text style={styles.text}>Signup</Text> 
+              </TouchableOpacity>
+
+              <Button title="Back to Login" onPress={onBackToLoginPress} />
+          </View>
         </ScrollView>
 
     );

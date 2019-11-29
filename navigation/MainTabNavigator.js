@@ -1,13 +1,12 @@
 import React from 'react';
 import { Platform } from 'react-native';
-import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
-
+import { createStackNavigator, createBottomTabNavigator, createSwitchNavigator } from 'react-navigation';
 import TabBarIcon from '../components/TabBarIcon';
-import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
-import TestScreen from "../screens/TestScreen";
 import ChatScreen from "../screens/ChatScreen";
+import ProfileUpdater from "../screens/ProfileUpdater";
+import ProfileScreen from "../screens/ProfileScreen"
 
 
 const config = Platform.select({
@@ -17,7 +16,7 @@ const config = Platform.select({
 
 const HomeStack = createStackNavigator(
   {
-    Home: HomeScreen,
+    Profile: ProfileScreen
   },
   config
 );
