@@ -2,11 +2,11 @@ import React from 'react';
 import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator, createSwitchNavigator } from 'react-navigation';
 import TabBarIcon from '../components/TabBarIcon';
-import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import ChatScreen from "../screens/ChatScreen";
-import ProfileUpdater from "../screens/ProfileUpdater";
-import ProfileScreen from "../screens/ProfileScreen"
+import ProfileScreen from "../screens/ProfileScreen";
+import SearchScreen from "../screens/SearchScreen";
+
 
 
 const config = Platform.select({
@@ -53,21 +53,21 @@ ChatStack.navigationOptions = {
 
 ChatStack.path = '';
 
-const LinksStack = createStackNavigator(
+const SearchStack = createStackNavigator(
   {
-    Links: LinksScreen,
+    Search: SearchScreen,
   },
   config
 );
 
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
+SearchStack.navigationOptions = {
+  tabBarLabel: 'Search',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
   ),
 };
 
-LinksStack.path = '';
+SearchStack.path = '';
 
 const SettingsStack = createStackNavigator(
   {
@@ -88,7 +88,7 @@ SettingsStack.path = '';
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
   ChatStack,
-  LinksStack,
+  SearchStack,
   SettingsStack,
 });
 
