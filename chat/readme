@@ -1,0 +1,7 @@
+ChatScreen.js
+  A non-real time chat created using gifted chat using this tutorial https://pusher.com/tutorials/chat-app-react-native-gifted-chat
+  and then tried connecting to firebase server using this tutorial https://blog.jscrambler.com/build-a-chat-app-with-firebase-and-react-native/ but kepting getting errors so I went back to non-real time.
+
+
+MainTabNavigator.js
+  Updated the chat icon on navigation bar to be chat bubble.
