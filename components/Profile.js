@@ -26,6 +26,7 @@ export default function StudentProfile(props) {
   const [homestate, setHomeState] = useState("");
   const [school, setSchool] = useState("");
   const [major, setMajor] = useState("");
+  const [profilePicURL, setProfilePicURL] = useState("gs://impact-dc23e.appspot.com/profilePictures/ewQai14oIqWoX6U1gfIPWZOLu1x2");
 
   var userID = props.UserID
   var userDB = firebase.firestore().collection("users")
@@ -45,6 +46,7 @@ export default function StudentProfile(props) {
                 setHomeState(doc.get("state"));
                 setSchool(doc.get("school"));
                 setMajor(doc.get("major"));
+                setProfilePicURL(doc.get("profilePicURL"))
             } 
             else{
                 console.log("Document does not exist");
@@ -60,7 +62,7 @@ export default function StudentProfile(props) {
                     <Image
                     style={styles.userImage}
                     source={{
-                        uri: 'http://www.carderator.com/assets/avatar_placeholder_small.png',
+                        uri: profilePicURL,
                     }}
                     />
                     <ProfileData field={"UserName"} data={username}/>

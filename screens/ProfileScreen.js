@@ -1,4 +1,4 @@
-import React, { useState}  from 'react';
+import React, { useState, useEffect}  from 'react';
 import {
   Image,
   Platform,
@@ -15,6 +15,7 @@ import { NavigationActions } from 'react-navigation';
 import * as firebase from 'firebase';
 import ProfileData from "../components/ProfileData";
 import ProfileUpdater from "./ProfileUpdater";
+import PhotoUploader from "./../components/PhotoUploader";
 
 export default function ProfileScreen(props) {
   const {width: WIDTH} = Dimensions.get('window');
@@ -29,17 +30,29 @@ export default function ProfileScreen(props) {
   const [school, setSchool] = useState("");
   const [major, setMajor] = useState("");
   const [isUpdateProfile, setUpdateProfile] = useState(false);
-  var userID = firebase.auth().currentUser.uid;
-  var userDB = firebase.firestore().collection("users")
-  var refrence = userDB.doc(userID);
+  const [URL, setURL] = useState("");
+  const [urlLoaded, setUrlLoaded] = useState(false);
+
+    const userID = String(firebase.auth().currentUser.uid);
+    const userDB = firebase.firestore().collection("users");
+    const refrence = userDB.doc(userID);
+    const storageRef = firebase.storage().ref()
+    const childRef = storageRef.child('pics/'+userID)
+    const urlRef = childRef.getDownloadURL();
   
   
   onUpdateProfilePress = () => {
     setUpdateProfile(true);
   }
+  
+  useEffect(() => {
+    setUrlLoaded(true);
+  }, [URL])
+ 
 
   if(!isLoadingComplete){
     //have a userID be passed to this component and the database info will be based on this user
+
     refrence.get().then(function(doc) {
       if(doc.exists){
         console.log("document exists");
@@ -51,13 +64,11 @@ export default function ProfileScreen(props) {
         setHomeState(doc.get("state"));
         setSchool(doc.get("school"));
         setMajor(doc.get("major"));
+        setURL(doc.get("profilePicURL"));
       }
       else{
         console.log("Document does not exist");
-      }
-    }).catch( (error) => {
-        console.log("Error getting document", error);
-    });
+      }})
     setLoadingComplete(true);
   } else{
       return (
@@ -66,12 +77,18 @@ export default function ProfileScreen(props) {
           <View style={styles.headerContainer}>
             <View style={styles.headerBackgroundImage}>
               <View style={styles.headerColumn}>
-                <Image
+                {(!urlLoaded)?  
+                  (<Image
                   style={styles.userImage}
                   source={{
-                    uri: 'http://www.carderator.com/assets/avatar_placeholder_small.png',
-                  }}
-                />
+                    uri: "gs://impact-dc23e.appspot.com/images/avatar_placeholder_small.png"
+                  }} />) :  
+                  (<Image
+                    style={styles.userImage}
+                    source={{
+                      uri: URL
+                    }}
+                  />)}
                 <ProfileData field={"UserName"} data={username}/>
               </View>
             </View>
@@ -90,6 +107,7 @@ export default function ProfileScreen(props) {
           </View>
 
           <Button title="Update Profile" onPress={onUpdateProfilePress} />
+          <PhotoUploader/>
         </View>
         </ScrollView>
       )

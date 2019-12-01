@@ -1,6 +1,6 @@
 //this component is called from the profie page. 
 
-import React, { useState}  from 'react'
+import React, { useState, useEffect}  from 'react'
 import {
   Image,
   Text,
@@ -27,6 +27,7 @@ export default function ProfileUpdater(props) {
     const [major, setMajor] = useState("");
     const [type, setType] = useState("");
     const [majortext, setMajorText] = useState("");
+    const [displayUploadPhoto, setDisplayUploadPhoto] = useState(false);
 
     var userID = props.UserID
     var userDB = firebase.firestore().collection("users")
@@ -103,10 +104,10 @@ export default function ProfileUpdater(props) {
                         setMajor(doc.get("major"));
                         setType(doc.get("userType"));
                         if(type === "mentor"){
-                            setMajorText("Update Majors to Mentor")
+                            setMajorText("Update Majors to Mentor");
                         }
                         else{
-                            setMajorText("Update Major")
+                            setMajorText("Update Major");
                         }
                     } 
                     else{
@@ -219,9 +220,8 @@ export default function ProfileUpdater(props) {
                             underlineColorAndroid='transparent'
                         />
                     </View>
-
+                    
                     <Button title="Click to Update Profile" onPress={onUpdatePress} />
-
                 </View>
                 );
             }
