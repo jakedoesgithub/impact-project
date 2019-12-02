@@ -14,7 +14,7 @@ import {
 import { NavigationActions } from 'react-navigation';
 import * as firebase from 'firebase';
 import ProfileData from "../components/ProfileData";
-import ProfileUpdater from "./ProfileUpdater";
+import ProfileUpdater from "./../components/ProfileUpdater";
 import PhotoUploader from "./../components/PhotoUploader";
 
 export default function ProfileScreen(props) {
@@ -32,17 +32,15 @@ export default function ProfileScreen(props) {
   const [isUpdateProfile, setUpdateProfile] = useState(false);
   const [URL, setURL] = useState("");
   const [urlLoaded, setUrlLoaded] = useState(false);
+  const [bio, setBio] = useState("");
 
     const userID = String(firebase.auth().currentUser.uid);
     const userDB = firebase.firestore().collection("users");
     const refrence = userDB.doc(userID);
-    const storageRef = firebase.storage().ref()
-    const childRef = storageRef.child('pics/'+userID)
-    const urlRef = childRef.getDownloadURL();
   
   
   onUpdateProfilePress = () => {
-    setUpdateProfile(true);
+    setUpdateProfile(!isUpdateProfile);
   }
   
   useEffect(() => {
@@ -65,6 +63,7 @@ export default function ProfileScreen(props) {
         setSchool(doc.get("school"));
         setMajor(doc.get("major"));
         setURL(doc.get("profilePicURL"));
+        setBio(doc.get("bio"));
       }
       else{
         console.log("Document does not exist");
@@ -101,12 +100,19 @@ export default function ProfileScreen(props) {
             <ProfileData field={"State"} data={homestate}/>
             <ProfileData field={"School"} data={school}/>
             <ProfileData field={"Major"} data={major}/>
+            <ProfileData field={"User Bio"} data={bio}/>
           {isUpdateProfile? (
              <ProfileUpdater UserID = {userID}  />
           ): (<View></View>)}
           </View>
-
-          <Button title="Update Profile" onPress={onUpdateProfilePress} />
+          <View>
+          {!isUpdateProfile ? (
+            <Button title="Show Profile Updater" onPress={onUpdateProfilePress} />
+          ):(
+            <Button title="Hide Profile Updater" onPress={onUpdateProfilePress} />
+          ) }
+          </View>
+          
           <PhotoUploader/>
         </View>
         </ScrollView>

@@ -1,5 +1,4 @@
 //this component is called from the profie page. 
-
 import React, { useState, useEffect}  from 'react'
 import {
   Image,
@@ -28,6 +27,7 @@ export default function ProfileUpdater(props) {
     const [type, setType] = useState("");
     const [majortext, setMajorText] = useState("");
     const [displayUploadPhoto, setDisplayUploadPhoto] = useState(false);
+    const [bio, setBio] = useState("");
 
     var userID = props.UserID
     var userDB = firebase.firestore().collection("users")
@@ -64,6 +64,7 @@ export default function ProfileUpdater(props) {
             return;
         }
         updateUserInDB();
+
     };
 
     onBackToProfilePress = () => {
@@ -82,8 +83,10 @@ export default function ProfileUpdater(props) {
             state: user_state,
             major: major,
             school: school,
+            bio: bio
         }).then(()=> {
             console.log("Document updated for user with ID: ", userID);
+            Alert.alert("Profile Updated!")
         }).catch(function(error) {
             console.error("Error updating document: ", error);
     });
@@ -103,6 +106,7 @@ export default function ProfileUpdater(props) {
                         setSchool(doc.get("school"));
                         setMajor(doc.get("major"));
                         setType(doc.get("userType"));
+                        setBio(doc.get("bio"));
                         if(type === "mentor"){
                             setMajorText("Update Majors to Mentor");
                         }
@@ -214,6 +218,20 @@ export default function ProfileUpdater(props) {
                             value={major}
                             onChangeText={(text) => setMajor(text)}
                             placeholder="Major"
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            placeholderTextColor={ 'rgba(255,255,255,0.7)'}
+                            underlineColorAndroid='transparent'
+                        />
+                    </View>
+
+                    <Text>Update Bio</Text>
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={styles.input}
+                            value={bio}
+                            onChangeText={(text) => setBio(text)}
+                            placeholder="Bio"
                             autoCapitalize="none"
                             autoCorrect={false}
                             placeholderTextColor={ 'rgba(255,255,255,0.7)'}

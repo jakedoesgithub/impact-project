@@ -90,7 +90,9 @@ export default function SignupScreen(props) {
         major: "N/A",
         school: "N/A",
         creationDate: firebase.firestore.FieldValue.serverTimestamp(),
-        profilePicURL: String(defaultPicURL)
+        profilePicURL: String(defaultPicURL),
+        connections: [userToken.uid],
+        bio: ""
       }).then(()=> {
         console.log("Document written to users with ID: ", userToken.uid);
     }).catch(function(error) {
