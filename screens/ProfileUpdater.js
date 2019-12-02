@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   TextInput,
   Button,
+  Dimensions,
   Alert,
   ScrollView,
   StyleSheet,
@@ -15,6 +16,7 @@ import {
 } from 'react-native';
 import * as firebase from 'firebase';
 
+const {width: WIDTH} = Dimensions.get('window');
 //need to pass the userID to it to make the database update easier
 export default function ProfileUpdater(props) {
     const [isLoadingComplete, setLoadingComplete] = useState(false);
@@ -118,11 +120,11 @@ export default function ProfileUpdater(props) {
                 return (
                 <View style={styles.backgroundContainer}>
                     
-                    <View style={styles.logoContainer}>
-                        <Text style={styles.logoText}>Change Profile Info</Text>
+                    <View style={styles.infoCenter}>
+                        <Text style={styles.info}>Change Profile Info</Text>
                     </View> 
                     
-                    <Text>Update First Name</Text>
+                    <Text style={styles.info}>Update First Name</Text>
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
@@ -136,7 +138,7 @@ export default function ProfileUpdater(props) {
                         />
                     </View>
             
-                    <Text>Update Last Name</Text>
+                    <Text style={styles.info}>Update Last Name</Text>
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
@@ -150,7 +152,7 @@ export default function ProfileUpdater(props) {
                         />
                     </View>
                     
-                    <Text>Update User Name</Text>
+                    <Text style={styles.info}>Update User Name</Text>
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
@@ -164,7 +166,7 @@ export default function ProfileUpdater(props) {
                         />
                     </View>
                     
-                    <Text>Update City</Text>
+                    <Text style={styles.info}>Update City</Text>
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
@@ -178,7 +180,7 @@ export default function ProfileUpdater(props) {
                         />
                     </View>
             
-                    <Text>Update State</Text>
+                    <Text style={styles.info}>Update State</Text>
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
@@ -192,7 +194,7 @@ export default function ProfileUpdater(props) {
                         />
                     </View>
 
-                    <Text>Update School</Text>
+                    <Text style={styles.info}>Update School</Text>
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
@@ -206,7 +208,7 @@ export default function ProfileUpdater(props) {
                         />
                     </View>
 
-                    <Text>{majortext}</Text>
+                    <Text style={styles.info}>{majortext}</Text>
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
@@ -239,6 +241,13 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
       color: '#696969',
     },
+    infoCenter: {
+      marginTop: 10,
+      alignItems: 'center',
+      fontSize: 15,
+      fontWeight: 'bold',
+      color: '#696969',
+    },
     infoRow: {
       flexDirection: 'row',
     },
@@ -259,7 +268,16 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       marginTop: null
     },
-    headerContainer: {},
+    inputContainer: {
+      flexDirection: 'row',
+      width : WIDTH -55,
+      height:30,
+      marginLeft:16,
+      borderRadius:25,
+      backgroundColor: '#368DEB',
+      paddingHorizontal:10,
+      padding:5,
+    },
     headerColumn: {
       backgroundColor: 'transparent',
       ...Platform.select({
