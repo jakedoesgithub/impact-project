@@ -27,7 +27,7 @@ export default function SignupScreen(props) {
     const [user_state, setUserState] = useState("");
   
 
-    onSignupPress = () => {
+    onSignupPress = async () => {
         if (password !== passwordConfirm) {
             Alert.alert("Passwords do not match")
             return;
@@ -63,10 +63,10 @@ export default function SignupScreen(props) {
         }
         //insert condition to check userType
 
-        firebase.auth().createUserWithEmailAndPassword(email_address, password)
-            .then(({user}) => {
+        await firebase.auth().createUserWithEmailAndPassword(email_address, password)
+            .then(async({user}) => {
               Alert.alert("Account successfuly created");
-              createUserInDB(user);
+              await createUserInDB(user);
               props.navigation.navigate("Login")
              }, (error) => { Alert.alert(error.message); });
     }
@@ -75,8 +75,10 @@ export default function SignupScreen(props) {
         props.navigation.navigate("Login");
     }
 
-    createUserInDB = (userToken) =>{ 
-      firebase.firestore().collection("users").doc(userToken.uid).set({
+    createUserInDB = async (userToken) => { 
+      const storageRef = await firebase.storage().ref();
+      const defaultPicURL = await  storageRef.child("images/avatar_placeholder_small.png").getDownloadURL()
+      await firebase.firestore().collection("users").doc(userToken.uid).set({
         email:email_address,
         userID: userToken.uid,
         firstName: first_name,
@@ -87,7 +89,10 @@ export default function SignupScreen(props) {
         state: user_state,
         major: "N/A",
         school: "N/A",
-        creationDate: firebase.firestore.FieldValue.serverTimestamp()
+        creationDate: firebase.firestore.FieldValue.serverTimestamp(),
+        profilePicURL: String(defaultPicURL),
+        connections: [userToken.uid],
+        bio: ""
       }).then(()=> {
         console.log("Document written to users with ID: ", userToken.uid);
     }).catch(function(error) {

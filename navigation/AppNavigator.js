@@ -5,8 +5,7 @@ import LoginScreen from './../screens/LoginScreen';
 import SignupScreen from './../screens/SignupScreen';
 import ForgotPasswordScreen from './../screens/ForgotPasswordScreen';
 import ProfileScreen from './../screens/ProfileScreen';
-import ProfileUpdater from "../screens/ProfileUpdater";
-
+import ProfileUpdater from "../components/ProfileUpdater";
 export default createAppContainer(
   createSwitchNavigator({
     Login:LoginScreen,
