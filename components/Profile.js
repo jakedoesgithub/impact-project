@@ -35,13 +35,13 @@ export default function ProfileScreen(props) {
   const userID = String(props.uid);
   const userDB = firebase.firestore().collection("users");
   const refrence = userDB.doc(userID);
-  
-  
-  
+
+
+
   useEffect(() => {
     setUrlLoaded(true);
   }, [URL])
- 
+
 
   if(!isLoadingComplete){
     //have a userID be passed to this component and the database info will be based on this user
@@ -71,12 +71,12 @@ export default function ProfileScreen(props) {
           <View style={styles.headerContainer}>
             <View style={styles.headerBackgroundImage}>
               <View style={styles.headerColumn}>
-                {(!urlLoaded)?  
+                {(!urlLoaded)?
                   (<Image
                   style={styles.userImage}
                   source={{
                     uri: "gs://impact-dc23e.appspot.com/images/avatar_placeholder_small.png"
-                  }} />) :  
+                  }} />) :
                   (<Image
                     style={styles.userImage}
                     source={{
@@ -145,6 +145,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         elevation: 1,
         marginTop: -1,
+        fontSize: 45,
       },
       android: {
         alignItems: 'center',
