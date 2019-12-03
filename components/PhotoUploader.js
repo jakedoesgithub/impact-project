@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Image, StyleSheet, Button, Text, View, Alert} from "react-native";
+import {Image, StyleSheet, TouchableOpacity, Button, Text, View, Alert} from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as firebase from "firebase";
 
@@ -28,14 +28,6 @@ export default function PhotoUploader(props){
         }
     }
 
-    uploadImage = async (uri) => {
-      const response = await fetch(uri);
-      const blob = await response.blob();
-      var ref = await firebase.storage().ref();
-      var picRef = await ref.child("pics/" + userID);
-      return(picRef.put(blob));
-    }
-
       uploadImage = async (uri) => {
         const response = await fetch(uri);
         const blob = await response.blob();
@@ -47,7 +39,5 @@ export default function PhotoUploader(props){
 
     return(
         <Button title="Change Profile Picture" onPress={onChangeProfilePicPress}/>
-
     )
-    
 }

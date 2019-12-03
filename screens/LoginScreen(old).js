@@ -11,7 +11,7 @@ export default class LoginScreen extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { 
+        this.state = {
             email: "",
             password: "",
         };
@@ -42,7 +42,7 @@ export default class LoginScreen extends React.Component {
         return (
             <View style={{paddingTop:50, alignItems:"center"}}>
 
-                <Text>Login</Text> 
+                <Text>Login</Text>
 
                 <TextInput style={{width: 200, height: 40, borderWidth: 1}}
                     value={this.state.email}
@@ -71,7 +71,3 @@ export default class LoginScreen extends React.Component {
         );
     }
 }
-
-const styles = StyleSheet.create({
-
-});

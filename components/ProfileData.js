@@ -9,10 +9,10 @@ import {
   /*props:
       field - the field name, ie  Username
       data - the data for the field, ie {usersUsername}
-    output: A text bar showing "Username: {usersUsername}*/ 
+    output: A text bar showing "Username: {usersUsername}*/
 export default function ProfileData(props){
     return(
-        <Text style={styles.info}>{props.field}: {props.data} </Text>
+        <Text style={styles.info}>{props.field} {props.data} </Text>
     );
 }
 
@@ -21,9 +21,9 @@ export default function ProfileData(props){
 const styles = StyleSheet.create({
     info: {
       marginTop: 10,
-      marginLeft:10,
+      marginLeft:5,
       fontSize: 15,
       fontWeight: 'bold',
-      color: '#696969',
+      color: 'white',
     }
 })

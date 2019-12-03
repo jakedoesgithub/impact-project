@@ -1,4 +1,4 @@
-//this component is called from the profie page. 
+//this component is called from the profie page.
 import React, { useState, useEffect}  from 'react'
 import {
   Image,
@@ -73,10 +73,10 @@ export default function ProfileUpdater(props) {
         console.log("Profile Update Pressed")
         props.navigation.navigate("Main");
     };
-    
 
 
-    updateUserInDB = () =>{ 
+
+    updateUserInDB = () =>{
         refrence.update({
             firstName: first_name,
             lastName: last_name,
@@ -115,7 +115,7 @@ export default function ProfileUpdater(props) {
                         else{
                             setMajorText("Update Major");
                         }
-                    } 
+                    }
                     else{
                         console.log("Document does not exist");
                     }
@@ -124,11 +124,11 @@ export default function ProfileUpdater(props) {
             } else {
                 return (
                 <View style={styles.backgroundContainer}>
-                    
+
                     <View style={styles.infoCenter}>
                         <Text style={styles.info}>Change Profile Info</Text>
-                    </View> 
-                    
+                    </View>
+
                     <Text style={styles.info}>Update First Name</Text>
                     <View style={styles.inputContainer}>
                         <TextInput
@@ -142,7 +142,7 @@ export default function ProfileUpdater(props) {
                             underlineColorAndroid='transparent'
                         />
                     </View>
-            
+
                     <Text style={styles.info}>Update Last Name</Text>
                     <View style={styles.inputContainer}>
                         <TextInput
@@ -156,7 +156,7 @@ export default function ProfileUpdater(props) {
                             underlineColorAndroid='transparent'
                         />
                     </View>
-                    
+
                     <Text style={styles.info}>Update User Name</Text>
                     <View style={styles.inputContainer}>
                         <TextInput
@@ -170,7 +170,7 @@ export default function ProfileUpdater(props) {
                             underlineColorAndroid='transparent'
                         />
                     </View>
-                    
+
                     <Text style={styles.info}>Update City</Text>
                     <View style={styles.inputContainer}>
                         <TextInput
@@ -184,7 +184,7 @@ export default function ProfileUpdater(props) {
                             underlineColorAndroid='transparent'
                         />
                     </View>
-            
+
                     <Text style={styles.info}>Update State</Text>
                     <View style={styles.inputContainer}>
                         <TextInput
@@ -227,7 +227,7 @@ export default function ProfileUpdater(props) {
                         />
                     </View>
 
-                    <Text>Update Bio</Text>
+                    <Text style={styles.info}>Update Bio</Text>
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
@@ -236,12 +236,15 @@ export default function ProfileUpdater(props) {
                             placeholder="Bio"
                             autoCapitalize="none"
                             autoCorrect={false}
-                            placeholderTextColor={ 'rgba(255,255,255,0.7)'}
+                            placeholderTextColor={ 'black'}
                             underlineColorAndroid='transparent'
                         />
                     </View>
-                    
-                    <Button title="Click to Update Profile" onPress={onUpdatePress} />
+                    <View style={styles.buttonContainer}>
+                      <TouchableOpacity onPress={onUpdatePress}>
+                        <Text style={styles.buttonText}>Update Profile</Text>
+                      </TouchableOpacity>
+                    </View>
                 </View>
                 );
             }
@@ -254,10 +257,10 @@ const styles = StyleSheet.create({
     },
     info: {
       marginTop: 10,
-      marginLeft:10,
+      marginLeft:5,
       fontSize: 15,
       fontWeight: 'bold',
-      color: '#696969',
+      color: 'white',
     },
     infoCenter: {
       marginTop: 10,
@@ -268,10 +271,6 @@ const styles = StyleSheet.create({
     },
     infoRow: {
       flexDirection: 'row',
-    },
-    socialIcon: {
-      marginLeft: 14,
-      marginRight: 14,
     },
     container: {
       flex: 1,
@@ -287,14 +286,15 @@ const styles = StyleSheet.create({
       marginTop: null
     },
     inputContainer: {
-      flexDirection: 'row',
-      width : WIDTH -55,
-      height:30,
-      marginLeft:16,
+    //  alignItems: 'center',
+      justifyContent: 'center',
+      width : 300,
+      height: 35,
       borderRadius:25,
-      backgroundColor: '#368DEB',
-      paddingHorizontal:10,
-      padding:5,
+      backgroundColor: '#0075C4',
+      marginTop: 10,
+      marginHorizontal: 25,
+      color: '#1F2421'
     },
     headerColumn: {
       backgroundColor: 'transparent',
@@ -325,20 +325,22 @@ const styles = StyleSheet.create({
       textAlign: 'center',
     },
     buttonContainer: {
-      alignItems: 'center'
-    },
-    button: {
-      marginTop:30,
-      height:45,
-      flexDirection: 'row',
-      justifyContent: 'center',
       alignItems: 'center',
-      marginBottom:20,
-      width:250,
-      borderRadius:30,
-      backgroundColor: "#00BFFF"
+      justifyContent: 'center',
+      width : 300,
+      height: 35,
+      borderRadius:25,
+      backgroundColor: '#579c61',
+      marginTop: 10,
+      marginHorizontal: 25,
     },
     buttonText: {
-      fontSize: 20
+      fontSize: 15,
+      color: 'white'
+    },
+    input: {
+      marginLeft: 10,
+      color: '#1F2421'
+
     }
   })
