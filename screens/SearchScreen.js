@@ -9,7 +9,7 @@ import {Image,
     Dimensions,
     ScrollView,
     setState,
-    FlatList} from 'react-native';
+    FlatList, TouchableOpacity} from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import * as firebase from 'firebase';
 import "firebase/firestore";
@@ -109,12 +109,16 @@ export default function SearchScreen(props) {
     else{
         return(
             <ScrollView>
+            <View style={styles.backgroundContainer}>
+               <Image source={require('../assets/images/BGI.png')} style={styles.backgroundContainer}/>
+            
                 <View>
+                    
                     {showSearch? (
                     <View>
-                    <Text>{(type === "student")? "Mentor Search" : "Student Search"} </Text>
+                    {/* <Text>{(type === "student")? "Mentor Search" : "Student Search"} </Text> */}
         
-                    <Text sytle={styles.text}>Enter City</Text>
+                    
                     <View style={styles.inputContainer}>
                         <TextInput 
                             style={styles.input}
@@ -128,9 +132,6 @@ export default function SearchScreen(props) {
                             autoCorrect={false}
                         />
                     </View>
-        
-        
-                    <Text style={styles.text}>Enter State</Text>
                     <View style={styles.inputContainer}>
                         <TextInput 
                             style={styles.input}
@@ -143,8 +144,6 @@ export default function SearchScreen(props) {
                             autoCorrect={false}
                         />
                     </View>
-        
-                    <Text style={styles.text}>Enter School</Text>
                     <View style={styles.inputContainer}>
                         <TextInput 
                             style={styles.input}
@@ -157,7 +156,10 @@ export default function SearchScreen(props) {
                             autoCorrect={false}
                         />
                     </View>
-                    <Button title="Press to Search" onPress={onSearchPress} />
+                    <TouchableOpacity style={styles.btnSEARCH} onPress={onSearchPress}>
+                        <Text style={styles.text}>SEARCH</Text> 
+                    </TouchableOpacity>
+                    
                 </View>)
                 :(<View><View>
                     {(!!data.length) ? (
@@ -175,7 +177,10 @@ export default function SearchScreen(props) {
                     ):null}
                 </View></View>)}
             </View>  
+            </View>
             </ScrollView>
+            
+           
         )
     }
 }
@@ -183,13 +188,15 @@ export default function SearchScreen(props) {
 
 const styles = StyleSheet.create({
     backgroundContainer: {
-        flex:1,
-        width: null,
-        height: null, 
-        backgroundColor: '#B5E3FF'    
+        flex:1,  
+        position: "absolute"
     },
     inputContainer: {
-        marginTop : 5
+        marginTop : 20
+    },
+    btnSEARCH:{
+        margin: 20
+
     },
     input: {
         width : WIDTH -55,
@@ -197,13 +204,26 @@ const styles = StyleSheet.create({
         borderRadius:25,
         fontSize: 16,
         paddingLeft: 20,
-        backgroundColor: '#368DEB',
-        color: 'rgba(255,255,255,0.7)',
+        backgroundColor: '#0075C4',
+        color: '#1F2421',
         marginHorizontal: 25
     },
     text:{
-        color: 'rgba(255,255,255,0.7)',
+        color: '#EFA00B',
         fontSize: 16,
         textAlign: 'center'
     }
 })
+SearchScreen.navigationOptions = {
+    title: 'Find a Mentor',
+    headerStyle: {
+        backgroundColor: '#2398f4',
+      },
+      headerTintColor: '#B5E3FF',
+      headerTitleStyle: {
+      fontWeight: 'bold',
+      
+      },
+
+
+};
