@@ -9,7 +9,8 @@ import {
   TouchableOpacity,
   Button,
   ScrollView,
-  Alert
+  Alert,
+  ActivityIndicator
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import * as firebase from 'firebase';
@@ -35,27 +36,20 @@ export default function ProfileScreen(props) {
   const [bio, setBio] = useState("");
 
     const userID = String(firebase.auth().currentUser.uid);
-    const userDB = firebase.firestore().collection("users");
-    const refrence = userDB.doc(userID);
+    const DB = firebase.firestore()
+    const refrence = DB.collection("users").doc(userID);
   
   
   onUpdateProfilePress = () => {
     setUpdateProfile(!isUpdateProfile);
   }
   
-  useEffect(() => {
-    setUrlLoaded(true);
-  }, [URL])
- 
-
-  if(!isLoadingComplete){
-    //have a userID be passed to this component and the database info will be based on this user
-
+  getData = () => {
     refrence.get().then(function(doc) {
       if(doc.exists){
         console.log("document exists");
         setEmail(doc.get("email"));
-        setUserName((doc.get("userName")));
+        setUserName(doc.get("userName"));
         setFirstName(doc.get("firstName"));
         setLastName(doc.get("lastName"));
         setHomeCity(doc.get("city"));
@@ -67,8 +61,24 @@ export default function ProfileScreen(props) {
       }
       else{
         console.log("Document does not exist");
-      }})
-    setLoadingComplete(true);
+      }}).then(() => setLoadingComplete(true))
+  }
+
+  useEffect(() => {
+    getData()
+  }, [])
+ 
+
+  if(!isLoadingComplete){
+    //have a userID be passed to this component and the database info will be based on this user
+    return (
+      <ActivityIndicator
+        animating={true}
+        style={styles.indicator}
+        size="large"
+      />
+    );
+
   } else{
       return (
         <ScrollView>
@@ -76,18 +86,12 @@ export default function ProfileScreen(props) {
           <View style={styles.headerContainer}>
             <View style={styles.headerBackgroundImage}>
               <View style={styles.headerColumn}>
-                {(!urlLoaded)?  
-                  (<Image
-                  style={styles.userImage}
-                  source={{
-                    uri: "gs://impact-dc23e.appspot.com/images/avatar_placeholder_small.png"
-                  }} />) :  
-                  (<Image
+                  <Image
                     style={styles.userImage}
                     source={{
                       uri: URL
                     }}
-                  />)}
+                  />
                 <ProfileData field={"UserName"} data={username}/>
               </View>
             </View>

@@ -12,7 +12,7 @@ import {Image,
     Picker  } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import * as firebase from 'firebase';
-import "firebase/firestore";
+
 
 const {width: WIDTH} = Dimensions.get('window')
 export default function SignupScreen(props) {
@@ -63,12 +63,11 @@ export default function SignupScreen(props) {
         }
         //insert condition to check userType
 
-        await firebase.auth().createUserWithEmailAndPassword(email_address, password)
+        firebase.auth().createUserWithEmailAndPassword(email_address, password)
             .then(async({user}) => {
               Alert.alert("Account successfuly created");
-              await createUserInDB(user);
-              props.navigation.navigate("Login")
-             }, (error) => { Alert.alert(error.message); });
+              createUserInDB(user);
+            })
     }
 
     onBackToLoginPress = () => {

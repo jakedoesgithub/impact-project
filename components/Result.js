@@ -9,7 +9,6 @@ import {Image,
     Alert,
     ScrollView} from 'react-native';
 import * as firebase from 'firebase';
-import leftPad from 'left-pad';
 
 export default function Result(props) {
 
@@ -20,20 +19,17 @@ export default function Result(props) {
             }).then(Alert.alert("Connection Added"))
     }
     
-    useEffect(() => {
-        setUrlLoaded(true);
-      }, [URL])
-   
+
     return (
         <View style={styles.background}>
-            <View style={styles.container}>
+            {/* <View style={styles.container}>
                 <Image
                         style={styles.userImage}
                         source={{
                         uri: props.url
                         }}
                 />
-            </View>
+            </View> */}
             <Text style={styles.text}>Username: {props.UserName}</Text>
             <Text style={styles.text}>Name: {props.FirstName} {props.LastName}</Text>
             <Text style={styles.text}>City: {props.City}</Text>

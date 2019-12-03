@@ -9,54 +9,91 @@ import {
   ScrollView,
   TextInput,
   FlatList,
-  Button
+  Button,
+  Picker
 } from 'react-native';
 import { ExpoLinksView } from '@expo/samples';
 import { GiftedChat } from "react-native-gifted-chat";
+import * as firebase from "firebase";
 
-export default class MessageScreen extends Component {
 
-  state = {
-    messages: []
+
+export default class ChatScreen extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      chaterName:"",
+      chateeName: "",
+      messages: [],
+      roomID: ""
+    };
+  }
+
+
+
+
+
+  getRoomID = () => {
+    const chatIDpre = [];
+    chatIDpre.push(props.chaterID);
+    chatIDpre.push(props.chateeID);
+    chatIDpre.sort();
+    const finalID = chatIDpre.join('_');
+    return finalID;
   };
 
-  componentDidMount() {
-    this.setState({
-      messages: [
-        {
-          _id: 1,
-          text: "test message",
-          createdAt: new Date(),
-          user: {
-            _id: 1,
-            name: "React Native",
-            avatar: "https://placeimg.com/140/140/any"
-          }
-        }
-      ]
-    });
+
+
+
+  getConnectionName = (userID) => {
+    const db = firebase.firestore();
+    db.collection("users").doc(userID).get().then((doc) =>{
+      return doc.get("userName");
+    })
   }
+
+
+
+  onSend = (messages = []) => {
+    this.setState({
+      messages: GiftedChat.append(previousState.messages, incomingMessage)})
+  };
+
+
+  
+
 
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.footer}>
-          <View style={styles.inputContainer}>
-            <TextInput style={styles.inputs}
-                placeholder="Write a message..."
-                underlineColorAndroid='transparent'
-                onChangeText={(name_address) => this.setState({name_address})}/>
-          </View>
-            <TouchableOpacity style={styles.btnSend}>
-              <Image source={{uri:"https://png.icons8.com/small/75/ffffff/filled-sent.png"}} style={styles.iconSend}  />
-            </TouchableOpacity>
-        </View>
+      <View>
+
+        <GiftedChat
+        messages={this.state.messages}
+        onSend={messages => this.onSend(messages)}
+        user={{
+          _id: this.state.chater
+          }}
+        />
       </View>
-    );
+      // <View style={styles.container}>
+      //   <View style={styles.footer}>
+      //     <View style={styles.inputContainer}>
+      //       <TextInput style={styles.inputs}
+      //           placeholder="Write a message..."
+      //           underlineColorAndroid='transparent'
+      //           onChangeText={(name_address) => this.setState({name_address})}/>
+      //     </View>
+      //       <TouchableOpacity style={styles.btnSend}>
+      //         <Image source={{uri:"https://png.icons8.com/small/75/ffffff/filled-sent.png"}} style={styles.iconSend}  />
+      //       </TouchableOpacity>
+      //   </View>
+      // </View>
+    )
   }
+  
 }
 
-MessageScreen.navigationOptions = {
+ChatScreen.navigationOptions = {
   title: 'Chat',
   tabBarIcon: ({ tintColor }) => (
     <Icon name="search" size={25} color={tintColor} />

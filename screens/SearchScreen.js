@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Image,
     StyleSheet,
     Text,
@@ -17,15 +17,16 @@ import Result from "./../components/Result";
 
 const {width: WIDTH} = Dimensions.get('window');
 export default function SearchScreen(props) {
-    const[city, setCity] = useState("");
+    const[homeCity, setCity] = useState("");
     const[homeState, setHomeState] = useState("");
-    const[school, setSchool] = useState("");
+    const[homeSchool, setSchool] = useState("");
     const[type, setType] = useState("");
     const[major, setMajor] = useState("");
     const[displayResults, setDisplayResults] = useState(false);
     const[isLoadingComplete, setLoadingComplete] = useState(false);
     const[data, setData] = useState([]);
     const[showSearch, setShowSearch] = useState(true);
+    const[searchComplete, setSearchComplete] = useState(false);
 
     let query = firebase.firestore().collection("users")
 
@@ -38,13 +39,14 @@ export default function SearchScreen(props) {
         }
       }
 
-    getResults = (query) =>{
+    getResults =  (query) =>{
+        console.log("entered query get()")
         query.get()
         .then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
                 console.log("query result exists:", doc.get("userName"))
-                const {userName, firstName, lastName, city, state, school, profilePicURL} = doc.data();
-                let temp = {
+                 const {userName, firstName, lastName, city, state, school, profilePicURL} = doc.data();
+                var temp = {
                     key: doc.id,
                     userName,
                     firstName,
@@ -54,46 +56,47 @@ export default function SearchScreen(props) {
                     school,
                     profilePicURL
                 }
-                let temp2 = data
+                var temp2 = data;
                 temp2.push(temp);
                 setData(temp2);
                 console.log(data);
-        }); setDisplayResults(!displayResults)
-    })
+        })
+        
+    }).then(() => setSearchComplete(true))
     }
     
 
 
-    SearchResults = (city, homeState, school, major) => {
-         
-        if(city !== ""){
-            query = query.where("city", "==", city);
+    SearchResults = (homeCity, homeState, homeSchool, major) => {
+         const query = firebase.firestore().collection("users")
+        if(homeCity !== ""){
+            query = query.where("city", "==", homeCity);
         }
         if(homeState !== ""){
             query = query.where("state", "==", homeState)
         }
-        if(school !== ""){
-            query = query.where("school", "==", school);
+        if(homeSchool !== ""){
+            query = query.where("school", "==", homeSchool)
         }
         query = query.where("major", "==", major);
         if(type === "student"){
-            query = query.where("userType", "==", "mentor");
+              query = query.where("userType", "==", "mentor");
         }else{
-            query = query.where("userType", "==", "student");
+              query = query.where("userType", "==", "student");
         }
-        getResults(query)
+        
     }  
     
 
     onSearchPress = () => {
-        SearchResults(city, homeState, school, major);
-        setShowSearch(false)
+        SearchResults(homeCity, homeState, homeSchool, major);
+        //setShowSearch(false)
+        setDisplayResults(!displayResults)
     }
 
     onReloadPress = () => {setDisplayResults(!displayResults)}
-    
 
-    if(!isLoadingComplete){
+    getData = () => {
         var userID = firebase.auth().currentUser.uid;
         var userDB = firebase.firestore().collection("users")
         var refrence = userDB.doc(userID);
@@ -103,13 +106,26 @@ export default function SearchScreen(props) {
                 setType(doc.get("userType"));
                 setMajor(doc.get("major"));
             };
-        })
-        setLoadingComplete(true);
+        }).then(() => setLoadingComplete(true))
+    }
+    
+    useEffect(()=>{
+        getData()
+    },[])
+
+    if(!isLoadingComplete){
+        return (
+            <ActivityIndicator
+              animating={true}
+              style={styles.indicator}
+              size="large"
+            />
+          );
     }
     else{
         return(
             <ScrollView>
-                <View>
+                
                     {showSearch? (
                     <View>
                     <Text>{(type === "student")? "Mentor Search" : "Student Search"} </Text>
@@ -118,7 +134,7 @@ export default function SearchScreen(props) {
                     <View style={styles.inputContainer}>
                         <TextInput 
                             style={styles.input}
-                            value={city}
+                            value={homeCity}
                             onChangeText={(text) => setCity(text)}
                             placeholder="City"
                             keyboardType="email-address"
@@ -148,7 +164,7 @@ export default function SearchScreen(props) {
                     <View style={styles.inputContainer}>
                         <TextInput 
                             style={styles.input}
-                            value={school}
+                            value={homeSchool}
                             onChangeText={(text) => setSchool(text)}
                             placeholder="School"
                             autoCapitalize="none"
@@ -158,23 +174,26 @@ export default function SearchScreen(props) {
                         />
                     </View>
                     <Button title="Press to Search" onPress={onSearchPress} />
-                </View>)
-                :(<View><View>
-                    {(!!data.length) ? (
+                    </View>)
+
+                :(<View></View>)}
+
+                    {(!SearchComplete) ? (
                     <View>
                         <Text>RESULTS TAB</Text>
+                        <Result url={"test"} uid={"test"} UserName={"test"} FirstName={"test"} 
+                            LastName={"test"} City={"test"} State={"test"} School={"test"} />
                         <FlatList data={data} 
-                            renderItem = {({item}) => 
+                            renderItem = {({item}) => {
                             <Result url={item.profilePicURL} uid={item.key} UserName={item.userName} FirstName={item.firstName} 
                             LastName={item.lastName} City={item.city} State={item.state} School={item.school} />
-                            }
+                            }}
                             keyExtractor={(item) => item.key}
                         />
-                        <Text>{"\n"}{"\n"}{"\n"}{"\n"}{"\n"}{"\n"}{"\n"}{"\n"}</Text>
+                        
                     </View>
-                    ):null}
-                </View></View>)}
-            </View>  
+                    ):(<Text>Waiting for results</Text>)}
+              
             </ScrollView>
         )
     }

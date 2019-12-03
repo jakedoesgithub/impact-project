@@ -3,7 +3,7 @@ import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator, createSwitchNavigator } from 'react-navigation';
 import TabBarIcon from '../components/TabBarIcon';
 import SettingsScreen from '../screens/SettingsScreen';
-import ChatScreen from "../screens/ChatScreen";
+import ChatSelectScreen from "../screens/ChatSelectScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import SearchScreen from "../screens/SearchScreen";
 
@@ -39,7 +39,7 @@ HomeStack.path = '';
 
 const ChatStack = createStackNavigator(
   {
-    Chat: ChatScreen,
+    Chat: ChatSelectScreen,
   },
   config
 );

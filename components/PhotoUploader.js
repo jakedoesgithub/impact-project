@@ -19,6 +19,7 @@ export default function PhotoUploader(props){
             const ref = await firebase.storage().ref()
             const picRef = await ref.child("pics/"+userID)
             const URL = await picRef.getDownloadURL();
+            let userID = firebase.auth().currentUser.uid;
             firebase.firestore().collection("users").doc(userID).update({
               profilePicURL: URL
             })
@@ -26,7 +27,15 @@ export default function PhotoUploader(props){
           })
         }
     }
-    
+
+    uploadImage = async (uri) => {
+      const response = await fetch(uri);
+      const blob = await response.blob();
+      var ref = await firebase.storage().ref();
+      var picRef = await ref.child("pics/" + userID);
+      return(picRef.put(blob));
+    }
+
       uploadImage = async (uri) => {
         const response = await fetch(uri);
         const blob = await response.blob();
