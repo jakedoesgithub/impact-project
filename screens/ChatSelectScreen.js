@@ -12,11 +12,9 @@ import {
   Picker,
   ActivityIndicator
 } from 'react-native';
-import { ExpoLinksView } from '@expo/samples';
 import { GiftedChat } from "react-native-gifted-chat";
 import * as firebase from "firebase";
-import { ChatManager, TokenProvider } from '@pusher/chatkit-client/react-native';
-import ChatPicker from "./../components/ChatPicker";
+import ChatScreen from "./../screens/ChatScreen";
 
 
 export default function ChatSelectScreen(props) {
@@ -87,19 +85,18 @@ export default function ChatSelectScreen(props) {
                       style={{height: 50, width: 100}}
                       placeholder="Select Account Type"
                       onValueChange={(itemValue) => {
-                          setCallee(itemValue);
+                          setChatee(itemValue);
                       }
                   }>
                       <Picker.Item label={"test"} value={"test"}/>
                       {connections.map(x => (x!==null)? (<Picker.Item label={x} value={x}/>) : (null) )}
                   </Picker>
-                  <Button label="Chat Selected User" onPress={onChatPress}></Button>
+                  <Button title={"Chat Selected User"} onPress={onChatPress}></Button>
           </View>
           )}
           {isChatting? (<ChatScreen chateeID={chatee} chaterID={chater}/>):(null)}
         </View>
     )
-
 }
 const styles = StyleSheet.create({
   indicator: {

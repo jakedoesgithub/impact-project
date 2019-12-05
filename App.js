@@ -14,7 +14,7 @@ export default function App(props) {
   const [isAuthenticated, setAuthenticated] = useState(false);
   const [isAuthenticationReady, setAuthenticationReady] = useState(false);
 
- // console.disableYellowBox = true;
+ console.disableYellowBox = true;
 
   onAuthStateChanged = (user) => {
     setAuthenticationReady(true);

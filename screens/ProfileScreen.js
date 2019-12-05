@@ -162,6 +162,12 @@ const styles = StyleSheet.create({
     flex: 2,
     //alignItems: 'center'
   },
+  indicator: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 80
+  },
   info: {
     marginTop: 10,
     marginLeft:10,

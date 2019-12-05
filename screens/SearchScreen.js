@@ -10,7 +10,7 @@ import {Image,
     ScrollView,
     setState,
     FlatList,
-     TouchableOpacity,
+    TouchableOpacity,
     ActivityIndicator} from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import * as firebase from 'firebase';
@@ -19,9 +19,9 @@ import Result from "./../components/Result";
 
 const {width: WIDTH} = Dimensions.get('window');
 export default function SearchScreen(props) {
-    const[homeCity, setCity] = useState("");
-    const[homeState, setHomeState] = useState("");
-    const[homeSchool, setSchool] = useState("");
+    const[homeCity, setCity] = useState("default");
+    const[homeState, setHomeState] = useState("default");
+    const[homeSchool, setSchool] = useState("default");
     const[type, setType] = useState("");
     const[major, setMajor] = useState("");
     const[displayResults, setDisplayResults] = useState(false);
@@ -46,7 +46,7 @@ export default function SearchScreen(props) {
         query.get()
         .then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
-                console.log("query result exists:", doc.get("userName"))
+                console.log("query result exists:");
                 let {userName, firstName, lastName, city, state, school, profilePicURL} = doc.data();
                 var temp = {
                     key: doc.id,
@@ -58,42 +58,38 @@ export default function SearchScreen(props) {
                     school,
                     profilePicURL
                 }
-                var temp2 = data;
-                temp2.push(temp);
-                setData(temp2);
-                console.log(data);
-        })
-        
-    }).then(() => setSearchComplete(true))
+                setData(data.concat(temp))
+                console.log(temp);})
+        }).then(() => {console.log(data);setSearchComplete(true)})
     }
     
 
 
     SearchResults = (homeCity, homeState, homeSchool, major) => {
-        let query = firebase.firestore().collection("users")
+        let query = firebase.firestore().collection("users");
         if(homeCity !== ""){
-            query = query.where("city", "==", homeCity);
+            query = query.where("city", "==", String(homeCity))
         }
         if(homeState !== ""){
-            query = query.where("state", "==", homeState)
+            query = query.where("state", "==", String(homeState))
         }
         if(homeSchool !== ""){
-            query = query.where("school", "==", homeSchool)
+            query = query.where("school", "==", String(homeSchool))
         }
-        query = query.where("major", "==", major);
-        if(type === "student"){
-              query = query.where("userType", "==", "mentor");
-        }else{
-              query = query.where("userType", "==", "student");
-        }
+        query = query.where("major", "==", String(major))
+        // if(type === "student"){
+        //       query = query.where("userType", "==", "mentor");
+        // }else{
+        //       query = query.where("userType", "==", "student");
+        // }
+        getResults(query)
         
     }  
     
 
-    onSearchPress = () => {
+    onSearchPress =  () => {
         SearchResults(homeCity, homeState, homeSchool, major);
         //setShowSearch(false)
-        setDisplayResults(!displayResults)
     }
 
     onReloadPress = () => {setDisplayResults(!displayResults)}
@@ -115,83 +111,79 @@ export default function SearchScreen(props) {
         getData()
     },[])
 
-    if(!isLoadingComplete){
-        return (
-            <ActivityIndicator
-              animating={true}
-              style={styles.indicator}
-              size="large"
-            />
-          );
-    }
-    else{
-        return(
-            <ScrollView>
-            <View style={styles.backgroundContainer}>
-               <Image source={require('../assets/images/BGI.png')} style={styles.backgroundContainer}/>    
- 
-                    <View style={styles.inputContainer}>
-                        <TextInput 
-                            style={styles.input}
-                            value={homeCity}
-                            onChangeText={(text) => setCity(text)}
-                            placeholder="City"
-                            keyboardType="email-address"
-                            autoCapitalize="none"
-                            placeholderTextColor={ 'rgba(255,255,255,0.7)'}
-                            underlineColorAndroid='transparent'
-                            autoCorrect={false}
-                        />
-                    </View>
-                    <View style={styles.inputContainer}>
-                        <TextInput 
-                            style={styles.input}
-                            value={homeState}
-                            onChangeText={(text) => setHomeState(text)}
-                            placeholder="State"
-                            autoCapitalize="none"
-                            placeholderTextColor={ 'rgba(255,255,255,0.7)'}
-                            underlineColorAndroid='transparent'
-                            autoCorrect={false}
-                        />
-                    </View>
-                    <View style={styles.inputContainer}>
-                        <TextInput 
-                            style={styles.input}
-                            value={homeSchool}
-                            onChangeText={(text) => setSchool(text)}
-                            placeholder="School"
-                            autoCapitalize="none"
-                            placeholderTextColor={ 'rgba(255,255,255,0.7)'}
-                            underlineColorAndroid='transparent'
-                            autoCorrect={false}
-                        />
-                    </View>
-                    <TouchableOpacity style={styles.btnSEARCH} onPress={onSearchPress}>
-                        <Text style={styles.text}>SEARCH</Text> 
-                    </TouchableOpacity>
-                    
-            
-                {(!!data.length) ? (
+    return(
+        <ScrollView>
                 <View>
-                    <Text>RESULTS TAB</Text>
-                    <Result url={"test"} uid={"test"} UserName={"test"} FirstName={"test"} 
-                        LastName={"test"} City={"test"} State={"test"} School={"test"} />
-                    <FlatList data={data} 
-                        renderItem = {({item}) => {
-                        <Result url={item.profilePicURL} uid={item.key} UserName={item.userName} FirstName={item.firstName} 
-                        LastName={item.lastName} City={item.city} State={item.state} School={item.school} />
-                        }}
-                        keyExtractor={(item) => item.key}
-                    />           
-                </View>)
-                    :(<Text>Waiting for results</Text>)}
-            </View>
-            </ScrollView>
+                    {/* <Image source={require('../assets/images/BGI.png')} style={styles.backgroundContainer}/>     */}
+                    {isLoadingComplete?(
+                        <View>
+                        <View style={styles.inputContainer}>
+                            <TextInput 
+                                style={styles.input}
+                                //value={homeCity}
+                                onChangeText={(text) => setCity(text)}
+                                placeholder="City"
+                                keyboardType="email-address"
+                                autoCapitalize="none"
+                                placeholderTextColor={ 'rgba(255,255,255,0.7)'}
+                                underlineColorAndroid='transparent'
+                                autoCorrect={false}
+                            />
+                        </View>
+                        <View style={styles.inputContainer}>
+                            <TextInput 
+                                style={styles.input}
+                                onChangeText={(text) => setHomeState(text)}
+                                placeholder="State"
+                                autoCapitalize="none"
+                                placeholderTextColor={ 'rgba(255,255,255,0.7)'}
+                                underlineColorAndroid='transparent'
+                                autoCorrect={false}
+                            />
+                        </View>
+                        <View style={styles.inputContainer}>
+                            <TextInput 
+                                style={styles.input}
+                                onChangeText={(text) => setSchool(text)}
+                                placeholder="School"
+                                autoCapitalize="none"
+                                placeholderTextColor={ 'rgba(255,255,255,0.7)'}
+                                underlineColorAndroid='transparent'
+                                autoCorrect={false}
+                            />
+                        </View>
+                        <TouchableOpacity style={styles.btnSEARCH} onPress={onSearchPress}>
+                            <Text style={styles.text}>SEARCH</Text> 
+                        </TouchableOpacity>
+                        </View>)
+                        :(<ActivityIndicator
+                            animating={true}
+                            style={styles.indicator}
+                            size="large"
+                          />
+                        )}
+                        
+        
+            {(searchComplete) ? (
+            <View>
+                <Text>RESULTS TAB</Text>
+                <Result url={"https://firebasestorage.googleapis.com/v0/b/impact-dc23e.appspot.com/o/images%2Favatar_placeholder_small.png?alt=media&token=0188f830-a1a3-495c-a5b2-c167e8051b98"} uid={"ZxxISi5lf1QA19ESQr3B3csXbb93"} UserName={"car-michael"} FirstName={"Michael"} 
+                    LastName={"Mitsubishi"} City={"Baton Rouge"} State={"Louisiana"} School={"LSU"} />
+                <FlatList data={data} 
+                    renderItem = {({item}) => {
+                    <Result url={item.profilePicURL} uid={item.key} UserName={item.userName} FirstName={item.firstName} 
+                    LastName={item.lastName} City={item.city} State={item.state} School={item.school} />
+                    }}
+                    keyExtractor={(item) => item.key}
+                />           
+            </View>)
+                :(<Text>Waiting for results</Text>)}
+        </View>
+        </ScrollView>
 
-        )
-    }
+    )
 }
+
 
 
 const styles = StyleSheet.create({
@@ -205,6 +197,12 @@ const styles = StyleSheet.create({
     btnSEARCH:{
         margin: 20
 
+    },
+    indicator: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 80
     },
     input: {
         width : WIDTH -55,

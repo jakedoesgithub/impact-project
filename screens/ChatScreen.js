@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -15,19 +15,14 @@ import {
 import { ExpoLinksView } from '@expo/samples';
 import { GiftedChat } from "react-native-gifted-chat";
 import * as firebase from "firebase";
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 
 
 
-export default class ChatScreen extends Component {
-  constructor(props){
-    super(props)
-    this.state = {
-      chaterName:"",
-      chateeName: "",
-      messages: [],
-      roomID: ""
-    };
-  }
+export default function ChatScreen (props) {
+  const[messages,setMessages]=useState([]);
+  const[roomID, setRoomID] = useState("");
+  
 
 
 
@@ -54,44 +49,110 @@ export default class ChatScreen extends Component {
 
 
 
-  onSend = (messages = []) => {
-    this.setState({
-      messages: GiftedChat.append(previousState.messages, incomingMessage)})
-  };
+  onSend = (ms = []) => {
+    let temp = messages
+    let a = GiftedChat.append(temp,ms)
+    setMessages(a)
+  }
 
+  useEffect(() => {
+    setMessages([
+        {
+          _id: 1,
+          text: 'Hello developer',
+          createdAt: new Date(),
+          user: {
+            _id: 2,
+            name: 'React Native',
+            avatar: 'https://placeimg.com/140/140/any',
+          },
+        },
+   ])},[])
 
-  
+   renderCustomView = (props) => {
+    if (props.currentMessage.location) {
+      return (
+        <View style={props.containerStyle}>
+          <MapView
+              provider={PROVIDER_GOOGLE}
+              style={[styles.mapView]}
+              region={{
+                latitude: props.currentMessage.location.latitude,
+                longitude: props.currentMessage.location.longitude,
+                latitudeDelta: 0.1,
+                longitudeDelta: 0.1,
+              }}
+              scrollEnabled={false}
+              zoomEnabled={false}
+            >
+              <MapView.Marker
+                coordinate={{
+                latitude: props.currentMessage.location.latitude,
+                longitude: props.currentMessage.location.longitude
+                }}
+              />
+            </MapView>
+        </View>
+      );
+    }
+    return null
+  }
 
-
-  render() {
-    return (
-      <View>
-
-        <GiftedChat
-        messages={this.state.messages}
-        onSend={messages => this.onSend(messages)}
-        user={{
-          _id: this.state.chater
+   return (
+    <>
+    {messages.length === 0 && (
+      <View style={[
+        StyleSheet.absoluteFill,
+        {
+          backgroundColor: 'white',
+          justifyContent: 'center',
+          alignItems: 'center',
+          bottom: 50
+        }]}>
+        <Image 
+          source={{ uri: 'https://i.stack.imgur.com/qLdPt.png' }}
+          style={{
+            ...StyleSheet.absoluteFillObject,
+            resizeMode: 'contain'
           }}
         />
-      </View>
-      // <View style={styles.container}>
-      //   <View style={styles.footer}>
-      //     <View style={styles.inputContainer}>
-      //       <TextInput style={styles.inputs}
-      //           placeholder="Write a message..."
-      //           underlineColorAndroid='transparent'
-      //           onChangeText={(name_address) => this.setState({name_address})}/>
-      //     </View>
-      //       <TouchableOpacity style={styles.btnSend}>
-      //         <Image source={{uri:"https://png.icons8.com/small/75/ffffff/filled-sent.png"}} style={styles.iconSend}  />
-      //       </TouchableOpacity>
-      //   </View>
-      // </View>
-    )
+    </View>
+    )}
+    <GiftedChat
+     messages={messages}
+     onSend={(messages) => onSend(messages)}
+     renderCustomView={renderCustomView}
+     user={{
+       _id: 1,
+     }}
+     parsePatterns={linkStyle => [
+        {
+          pattern: /#(\w+)/,
+          style: { ...linkStyle, color: 'lightgreen' },
+          onPress: props => alert(`press on ${props}`),
+        },
+      ]}
+   />
+   </>
+  );
+    //     <View style={styles.container}>
+    //       <View style={styles.footer}>
+    //         <View style={styles.inputContainer}>
+    //           <TextInput style={styles.inputs}
+    //               placeholder="Write a message..."
+    //               underlineColorAndroid='transparent'
+    //               onChangeText={(name_address) => this.setState({name_address})}/>
+    //         </View>
+    //           <TouchableOpacity style={styles.btnSend}>
+    //             <Image source={{uri:"https://png.icons8.com/small/75/ffffff/filled-sent.png"}} style={styles.iconSend}  />
+    //           </TouchableOpacity>
+    //       </View>
+    //     </View>
+    //   </View> */
+    // )
+    
   }
   
-}
 
 ChatScreen.navigationOptions = {
   title: 'Chat',
@@ -105,6 +166,12 @@ const styles = StyleSheet.create({
     flex:1,
     paddingTop: 15,
     backgroundColor: '#B5E3FF',
+  },
+  indicator: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 80
   },
   list:{
     paddingHorizontal: 17,
